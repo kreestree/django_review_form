@@ -1,0 +1,14 @@
+{% extends 'reviewform/base.html' %}
+{% block main %}
+<div class="px-5 py-2">
+  <h1>{{ title }}:</h1>
+
+  <form action="{% url 'add_problem' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <br>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+  </form>
+
+</div>
+{% endblock %}
