@@ -1,5 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from PIL import UnidentifiedImageError
+from django.shortcuts import render, redirect
 
 from reviewform.forms import *
 from reviewform.models import *
@@ -11,9 +11,12 @@ def add_problem(request):
         if form.is_valid():
             problem = form.save()
             images = form.cleaned_data["image_field"]
-            for image in images:
-                Image.objects.create(problem=problem, image=image)
-            return redirect('success')
+            try:
+                for image in images:
+                    Image.objects.create(problem=problem, image=image)
+                return redirect('success')
+            except UnidentifiedImageError:
+                form.add_error('image_field', 'Ошибка добавления фото')
     else:
         form = AddProblemForm()
 
